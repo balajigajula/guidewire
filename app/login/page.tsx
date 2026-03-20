@@ -27,8 +27,8 @@ export default function LoginPage() {
       const data = authSendOtp(normalizedPhone);
       setDebugOtp(data.otp);
       setStage("enter_otp");
-    } catch (e: any) {
-      setError(e?.message ?? "Something went wrong");
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -40,8 +40,8 @@ export default function LoginPage() {
     try {
       const data = authVerifyOtp({ phoneRaw: normalizedPhone, otp });
       router.push(data.needsOnboarding ? "/dashboard" : "/dashboard");
-    } catch (e: any) {
-      setError(e?.message ?? "Something went wrong");
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Something went wrong");
     } finally {
       setLoading(false);
     }

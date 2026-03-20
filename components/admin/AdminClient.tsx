@@ -94,7 +94,7 @@ export default function AdminClient() {
                     <YAxis stroke="currentColor" tickLine={false} />
                     <Tooltip
                       contentStyle={{ background: "rgba(17,17,17,0.95)", border: "1px solid rgba(255,255,255,0.1)" }}
-                      formatter={(v: any) => [`${v} policies`, ""]}
+                      formatter={(v: unknown) => [`${v} policies`, ""]}
                     />
                     <Bar dataKey="count" fill="#38bdf8" radius={[8, 8, 0, 0]} />
                   </BarChart>
@@ -120,7 +120,7 @@ export default function AdminClient() {
                     <YAxis stroke="currentColor" tickLine={false} />
                     <Tooltip
                       contentStyle={{ background: "rgba(17,17,17,0.95)", border: "1px solid rgba(255,255,255,0.1)" }}
-                      formatter={(v: any) => [`₹${Math.round(Number(v)).toLocaleString("en-IN")}`, "Payout sum"]}
+                      formatter={(v: unknown) => [`₹${Math.round(Number(v)).toLocaleString("en-IN")}`, "Payout sum"]}
                     />
                     <Line type="monotone" dataKey="payoutSumInr" stroke="#34d399" strokeWidth={2.5} dot={false} />
                   </LineChart>

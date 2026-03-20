@@ -2,7 +2,6 @@ import type {
   Claim,
   OtpRecord,
   Policy,
-  RiskSummary,
   SessionRecord,
   User,
   UserProfile,
@@ -11,7 +10,6 @@ import type {
 import { clamp, getIsoWeekKey, roundToStep } from "./utils";
 import { getMockWeatherSnapshot, TRIGGER_THRESHOLDS, getCityRiskIndex } from "./mockWeather";
 import { calculateRiskSummary } from "./riskEngine";
-import { buildTriggerReason } from "./claimsEngine";
 import { evaluateTrigger } from "./triggerEngine";
 import { detectFraud } from "./fraudEngine";
 import { getMockTrafficSnapshot } from "./mockTraffic";
@@ -336,24 +334,6 @@ export function getCurrentWeekKey(date = new Date()) {
   return getIsoWeekKey(date);
 }
 
-function ensurePolicyForCurrentWeek(args: { user: User }) {
-  const state = readState();
-  if (!args.user.profile) throw new Error("ONBOARDING_REQUIRED");
-  const weekKey = getCurrentWeekKey();
-  const existing = state.policies.find((p) => p.userId === args.user.id && p.weekKey === weekKey);
-  if (existing) return existing;
-
-  const variationForPolicy = Math.floor(now() / 20_000);
-  const weatherForPolicy = getMockWeatherSnapshot({
-    city: args.user.profile.city,
-    seedKey: `policy-${weekKey}`,
-    variation: variationForPolicy,
-  });
-
-  // getMockWeatherSnapshot is async; but ensurePolicy is sync for store. We'll expose async wrapper below.
-  return { placeholder: true } as any;
-}
-
 async function getOrCreatePolicy(args: { user: User }) {
   const state = readState();
   if (!args.user.profile) throw new Error("ONBOARDING_REQUIRED");
@@ -408,7 +388,7 @@ export async function dashboardSnapshotGet(args: { user: User }) {
       const weeklyEarningsInrInner = Math.round(profile.avgDailyIncomeInr * 7);
       const dayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-      const pointsInner: any[] = [];
+      const pointsInner: { dayLabel: string; earningsBeforeInr: number; earningsAfterDisruptionInr: number; disruptionLabel: string }[] = [];
       for (let dayIdx = 0; dayIdx < 7; dayIdx++) {
         const dayLabel = dayLabels[dayIdx] ?? `Day ${dayIdx + 1}`;
         const weather = await getMockWeatherSnapshot({

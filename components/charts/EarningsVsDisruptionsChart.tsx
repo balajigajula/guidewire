@@ -32,7 +32,7 @@ export default function EarningsVsDisruptionsChart({
             contentStyle={{ background: "rgba(17,17,17,0.95)", border: "1px solid rgba(255,255,255,0.1)" }}
             labelStyle={{ color: "white", fontWeight: 700 }}
             itemStyle={{ color: "white" }}
-            formatter={(value: any) => `₹${Math.round(Number(value)).toLocaleString("en-IN")}`}
+            formatter={(value: unknown) => `₹${Math.round(Number(value)).toLocaleString("en-IN")}`}
             labelFormatter={(label) => `Day: ${label}`}
           />
           <Line

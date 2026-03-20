@@ -1,4 +1,4 @@
-import type { TriggerReason, WeatherSnapshot } from "./types";
+import type { WeatherSnapshot } from "./types";
 import { buildTriggerReason } from "./claimsEngine";
 
 export function evaluateTrigger(weather: WeatherSnapshot) {

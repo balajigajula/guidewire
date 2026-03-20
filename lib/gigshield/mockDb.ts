@@ -336,7 +336,7 @@ export function createSession(args: { userId: string; expiresAt: number }) {
 export function getUserIdFromSession(args: { sessionId: string; now: number }) {
   const session = getDb().sessions.get(args.sessionId);
   if (!session) return undefined;
-  if (now > session.expiresAt) return undefined;
+  if (args.now > session.expiresAt) return undefined;
   return session.userId;
 }
 

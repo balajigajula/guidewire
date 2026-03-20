@@ -49,8 +49,8 @@ export default function OnboardingForm({
 
       profileSave({ userId: user.id, profile });
       window.location.href = "/dashboard";
-    } catch (e: any) {
-      setError(e?.message ?? "Something went wrong");
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Something went wrong");
     } finally {
       setLoading(false);
     }

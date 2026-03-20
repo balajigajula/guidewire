@@ -88,7 +88,7 @@ export default function DashboardClient({ user }: { user: User }) {
     pollTimerRef.current = window.setInterval(async () => {
       try {
         const data = await triggerPoll({ user });
-        if (data.triggered) {
+        if (data.triggered && data.claim) {
           setToast({
             title: "Claim Initiated",
             body: `Payout: ₹${Math.round(data.claim.payoutInr).toLocaleString("en-IN")} (mock UPI).`,
